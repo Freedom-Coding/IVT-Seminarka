@@ -1,0 +1,107 @@
+h1
+{
+    color: white;
+    text-align: center;
+    font-size: clamp(1.5rem, 5vw, 3rem);
+    font-weight: bold;
+    font-family: Helvetica, sans-serif;
+    text-shadow: 6px 6px 8px rgba(0, 0, 0, 0.5);
+}
+
+p
+{
+    color: white;
+}
+
+body
+{
+    background-color: #2d3748;
+}
+
+.code-text-field
+{
+    height: 140px;
+    border-radius: 10px;
+    background: #192029;
+    color: white;
+    white-space: pre;
+    font-family: monospace;
+    margin-left: 40%;
+    margin-right: 40%;
+    margin-top: 30px;
+    padding: 20px;
+    font-size: large;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.button
+{
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    color: white;
+    background-color: #2d3748;
+}
+
+.button-correct
+{
+    background-color: rgb(43, 153, 43);
+}
+
+.button-incorrect
+{
+    background-color: rgb(172, 38, 38);
+}
+
+.button-container
+{
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding-top: 40px;
+}
+
+.dialog
+{
+    display: none;
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 170px;
+    width: 200px;
+    background: #192029;
+    border-radius: 10px;
+    color: white;
+    font-family: monospace;
+    padding: 20px;
+    font-size: large;
+    text-align: center;
+    z-index: 1000;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.dialog-correct
+{
+    background-color: rgb(43, 153, 43);
+}
+
+.dialog-incorrect
+{
+    background-color: rgb(172, 38, 38);
+}
+
+.dialog.show
+{
+    display: block;
+}
+
+.line-number
+{
+    color: rgb(103, 115, 136);
+    user-select: none;
+    margin-right: 20px;
+}

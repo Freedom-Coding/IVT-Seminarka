@@ -1,0 +1,72 @@
+[
+    {
+        "id": 1,
+        "code": "x = 10\ny = 0\nresult = x / y\nprint(result)",
+        "hasError": true,
+        "errorLine": 3,
+        "explanation": "Division by zero causes a runtime error."
+    },
+    {
+        "id": 2,
+        "code": "def greet(name):\n    return 'Hello ' + name\nmessage = greet('Marek')\nprint(message)\nprint('Done')",
+        "hasError": false,
+        "errorLine": null,
+        "explanation": null
+    },
+    {
+        "id": 3,
+        "code": "numbers = [1, 2, 3]\nfor i in range(4):\n    print(numbers[i])\nprint('Finished')",
+        "hasError": true,
+        "errorLine": 3,
+        "explanation": "IndexError occurs because index 3 is out of range."
+    },
+    {
+        "id": 4,
+        "code": "def add(a, b):\nprint(a + b)\nresult = add(5, 3)\nprint(result)",
+        "hasError": true,
+        "errorLine": 2,
+        "explanation": "Indentation error: line 2 must be indented inside the function."
+    },
+    {
+        "id": 5,
+        "code": "x = '5'\ny = 10\nz = x + y\nprint(z)",
+        "hasError": true,
+        "errorLine": 3,
+        "explanation": "TypeError: cannot add string and integer."
+    },
+    {
+        "id": 6,
+        "code": "def divide(a, b):\n    return a / b\nprint(divide(10, 2))\nprint(divide(9, 3))\nprint(divide(8, 4))",
+        "hasError": false,
+        "errorLine": null,
+        "explanation": null
+    },
+    {
+        "id": 7,
+        "code": "name = 'John'\nif name = 'John':\n    print('Hello John')\nprint('Done')",
+        "hasError": true,
+        "errorLine": 2,
+        "explanation": "SyntaxError: '=' should be '==' in condition."
+    },
+    {
+        "id": 8,
+        "code": "items = {'a': 1, 'b': 2}\nprint(items['a'])\nprint(items['c'])\nprint('Done')",
+        "hasError": true,
+        "errorLine": 3,
+        "explanation": "KeyError: key 'c' does not exist in dictionary."
+    },
+    {
+        "id": 9,
+        "code": "def multiply(a, b):\n    return a * b\nresult = multiply(3, 4)\nprint(result)\nprint('Success')",
+        "hasError": false,
+        "errorLine": null,
+        "explanation": null
+    },
+    {
+        "id": 10,
+        "code": "import math\nnumber = -1\nresult = math.sqrt(number)\nprint(result)\nprint('Done')",
+        "hasError": true,
+        "errorLine": 3,
+        "explanation": "math.sqrt() cannot take a negative number."
+    }
+]

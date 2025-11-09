@@ -1,0 +1,37 @@
+<!Doctype html>
+<html>
+
+    <head>
+        <title> Will it compile? </title>
+        <link rel="stylesheet" href="./style.css">
+    </head>
+
+    <body>
+        <h1>Will it compile?</h1>
+
+        <div class="code-text-field"></div>
+
+        <div class="button-container">
+            <button class="button button-correct">Correct</button>
+            <button class="button button-incorrect">Incorrect</button>
+        </div>
+
+        <div class="dialog dialog-correct">
+            <p>Correct answer!</p>
+            <button class=" button" id="correctDialogButton">Next </button>
+        </div>
+
+        <div class="dialog dialog-incorrect">
+            <p>Wrong answer!</p>
+            <button class="button" id="incorrectDialogButton">Next</button>
+            <p id="errorExplanation"></p>
+        </div>
+
+        <div id="leaderboard">
+            <h1>Leaderboard</h1>
+        </div>
+
+        <script src="./script.js"></script>
+    </body>
+
+</html>
