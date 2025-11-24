@@ -1,3 +1,10 @@
+:root
+{
+    --lightGray-color: #2d3748;
+    --darkGray-color: #192029;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+}
+
 h1
 {
     color: white;
@@ -15,14 +22,14 @@ p
 
 body
 {
-    background-color: #2d3748;
+    background-color: var(--lightGray-color);
 }
 
 .code-text-field
 {
     height: 140px;
     border-radius: 10px;
-    background: #192029;
+    background: var(--darkGray-color);
     color: white;
     white-space: pre;
     font-family: monospace;
@@ -31,7 +38,7 @@ body
     margin-top: 30px;
     padding: 20px;
     font-size: large;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 4px 10px var(--shadow-color);
 }
 
 .button
@@ -41,9 +48,16 @@ body
     border-radius: 10px;
     border: none;
     cursor: pointer;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 4px 10px var(--shadow-color);
     color: white;
-    background-color: #2d3748;
+    background-color: var(--lightGray-color);
+}
+
+.button-dark
+{
+    background-color: var(--darkGray-color);
+    margin: 30px;
+    transform: translate(0px, -250px);
 }
 
 .button-correct
@@ -73,7 +87,7 @@ body
     transform: translate(-50%, -50%);
     height: 170px;
     width: 200px;
-    background: #192029;
+    background: var(--darkGray-color);
     border-radius: 10px;
     color: white;
     font-family: monospace;
@@ -81,7 +95,7 @@ body
     font-size: large;
     text-align: center;
     z-index: 1000;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 4px 10px var(--shadow-color);
 }
 
 .dialog-correct
@@ -104,4 +118,17 @@ body
     color: rgb(103, 115, 136);
     user-select: none;
     margin-right: 20px;
+}
+
+.leaderboard
+{
+    background: var(--darkGray-color);
+    width: 20%;
+    padding: 15px;
+    box-shadow: 0px 4px 10px var(--shadow-color);
+    border-radius: 10px;
+    color: white;
+    font-family: monospace;
+    font-size: large;
+    transform: translate(0px, -250px);
 }
