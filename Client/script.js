@@ -1,8 +1,11 @@
 let questions = [];
 let currentQuestion;
+let dailyQuizQuestions;
+let doingDailyQuiz = false;
 
 async function LoadQuestions() 
 {
+    document.getElementById("currentQuizQuestion").style.display = "none";
     questions = await fetch("./questions.json").then(response => response.json());
 
     ShowRandomQuestion();
@@ -18,7 +21,12 @@ function ShowRandomQuestion()
     while (randomQuestion == currentQuestion);
 
     currentQuestion = randomQuestion;
-    const lines = currentQuestion.code.split("\n");
+    ShowQuestion(currentQuestion);
+}
+
+function ShowQuestion(question)
+{
+    const lines = question.code.split("\n");
     const formatted = lines
         .map((line, index) => `<span class="line-number">${index + 1}</span>${line}`)
         .join("\n");
@@ -32,12 +40,13 @@ function AddButtonListeners()
     document.getElementById("correctDialogButton").addEventListener("click", CorrectDialogButton);
     document.getElementById("incorrectDialogButton").addEventListener("click", IncorrectDialogButton);
     document.getElementById("dailyQuizButton").addEventListener("click", DailyQuizButton);
+    document.getElementById("leaderboardForm").addEventListener("submit", SubmitScore);
 }
 
 function CorrectButton()
 {
     const dialogClass = currentQuestion.hasError ? ".dialog-incorrect" : ".dialog-correct";
-    document.querySelector(dialogClass).classList.add("show");
+    document.querySelector(dialogClass).style.display = "block";
 
     if (currentQuestion.hasError)   
     {
@@ -48,7 +57,7 @@ function CorrectButton()
 function IncorrectButton()
 {
     const dialogClass = currentQuestion.hasError ? ".dialog-correct" : ".dialog-incorrect";
-    document.querySelector(dialogClass).classList.add("show");
+    document.querySelector(dialogClass).style.display = "block";
 
     if (!currentQuestion.hasError)
     {
@@ -58,21 +67,55 @@ function IncorrectButton()
 
 function IncorrectDialogButton()
 {
-    document.querySelector(".dialog-incorrect").classList.remove("show");
-    ShowRandomQuestion();
+    document.querySelector(".dialog-incorrect").style.display = "none";
+    ShowNextQuestion();
 }
 
 function CorrectDialogButton()
 {
-    document.querySelector(".dialog-correct").classList.remove("show");
-    ShowRandomQuestion();
+    document.querySelector(".dialog-correct").style.display = "none"
+    ShowNextQuestion();
+}
+
+function ShowNextQuestion() 
+{
+    if (doingDailyQuiz)
+    {
+        currentQuestion += 1;
+        document.getElementById("currentQuizQuestion").textContent = `Current quiz question: ${currentQuestion + 1}`;
+        if (currentQuestion >= dailyQuizQuestions.length)
+        {
+            document.getElementById("currentQuizQuestion").style.display = "none";
+            ShowRandomQuestion();
+            doingDailyQuiz = false;
+            //End of daily quiz
+        }
+        else
+        {
+            const questionIndex = dailyQuizQuestions[currentQuestion];
+            ShowQuestion(questions[questionIndex]);
+        }
+    }
+    else
+    {
+        ShowRandomQuestion();
+    }
 }
 
 async function DailyQuizButton()
 {
+    if (doingDailyQuiz) return;
+
+    currentQuestion = 0;
+    const currentQuestionText = document.getElementById("currentQuizQuestion");
+    currentQuestionText.style.display = "block";
+    currentQuestionText.textContent = `Current quiz question: ${currentQuestion + 1}`;
     const response = await fetch("https://ivt-seminarka.uc.r.appspot.com/dailyQuiz");
-    const data = await response.json();
-    console.log(data);
+    dailyQuizQuestions = await response.json();
+    doingDailyQuiz = true;
+
+    const dailyQuestionIndex = dailyQuizQuestions[0];
+    ShowQuestion(questions[dailyQuestionIndex]);
 }
 
 async function LoadLeaderboard()
@@ -97,8 +140,15 @@ async function LoadLeaderboard()
     }
 }
 
-async function SubmitScore(name, score)
+async function SubmitScore()
 {
+    const form = document.getElementById("leaderboardForm");
+    const formData = new FormData(form);
+    let name;
+    formData.forEach((v, k) => name = v);
+
+    score = 100;
+
     try
     {
         await fetch("https://ivt-seminarka.uc.r.appspot.com/leaderboard",

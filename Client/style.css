@@ -15,6 +15,11 @@ h1
     text-shadow: 6px 6px 8px rgba(0, 0, 0, 0.5);
 }
 
+h2
+{
+    color: white;
+}
+
 p
 {
     color: white;
@@ -108,11 +113,6 @@ body
     background-color: rgb(172, 38, 38);
 }
 
-.dialog.show
-{
-    display: block;
-}
-
 .line-number
 {
     color: rgb(103, 115, 136);
@@ -131,4 +131,9 @@ body
     font-family: monospace;
     font-size: large;
     transform: translate(0px, -250px);
+}
+
+label
+{
+    color: white;
 }
