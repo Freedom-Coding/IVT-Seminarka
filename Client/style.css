@@ -5,9 +5,15 @@
     --shadow-color: rgba(0, 0, 0, 0.3);
 }
 
+body
+{
+    font-family: monospace;
+    color: white;
+    background-color: var(--lightGray-color);
+}
+
 h1
 {
-    color: white;
     text-align: center;
     font-size: clamp(1.5rem, 5vw, 3rem);
     font-weight: bold;
@@ -15,29 +21,12 @@ h1
     text-shadow: 6px 6px 8px rgba(0, 0, 0, 0.5);
 }
 
-h2
-{
-    color: white;
-}
-
-p
-{
-    color: white;
-}
-
-body
-{
-    background-color: var(--lightGray-color);
-}
-
 .code-text-field
 {
     height: 140px;
     border-radius: 10px;
     background: var(--darkGray-color);
-    color: white;
     white-space: pre;
-    font-family: monospace;
     margin-left: 40%;
     margin-right: 40%;
     margin-top: 30px;
@@ -48,13 +37,13 @@ body
 
 .button
 {
+    color: white;
     padding: 10px 20px;
     font-size: 1.2rem;
     border-radius: 10px;
     border: none;
     cursor: pointer;
     box-shadow: 0px 4px 10px var(--shadow-color);
-    color: white;
     background-color: var(--lightGray-color);
 }
 
@@ -94,8 +83,6 @@ body
     width: 200px;
     background: var(--darkGray-color);
     border-radius: 10px;
-    color: white;
-    font-family: monospace;
     padding: 20px;
     font-size: large;
     text-align: center;
@@ -127,13 +114,12 @@ body
     padding: 15px;
     box-shadow: 0px 4px 10px var(--shadow-color);
     border-radius: 10px;
-    color: white;
-    font-family: monospace;
     font-size: large;
     transform: translate(0px, -250px);
 }
 
-label
+form
 {
-    color: white;
+    /*display: none;*/
+    background-color: var(--lightGray-color);
 }

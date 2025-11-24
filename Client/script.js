@@ -3,9 +3,13 @@ let currentQuestion;
 let dailyQuizQuestions;
 let doingDailyQuiz = false;
 
+const errorExplanation = document.getElementById("errorExplanation");
+const quizQuestionCounter = document.getElementById("currentQuizQuestion");
+const leaderboardForm = document.getElementById("leaderboardForm");
+
 async function LoadQuestions() 
 {
-    document.getElementById("currentQuizQuestion").style.display = "none";
+    quizQuestionCounter.style.display = "none";
     questions = await fetch("./questions.json").then(response => response.json());
 
     ShowRandomQuestion();
@@ -50,7 +54,7 @@ function CorrectButton()
 
     if (currentQuestion.hasError)   
     {
-        document.getElementById("errorExplanation").innerText = currentQuestion.explanation;
+        errorExplanation.innerText = currentQuestion.explanation;
     }
 }
 
@@ -61,7 +65,7 @@ function IncorrectButton()
 
     if (!currentQuestion.hasError)
     {
-        document.getElementById("errorExplanation").innerText = "There are no errors in this code.";
+        errorExplanation.innerText = "There are no errors in this code.";
     }
 }
 
@@ -82,13 +86,13 @@ function ShowNextQuestion()
     if (doingDailyQuiz)
     {
         currentQuestion += 1;
-        document.getElementById("currentQuizQuestion").textContent = `Current quiz question: ${currentQuestion + 1}`;
+        quizQuestionCounter.textContent = `Current quiz question: ${currentQuestion + 1}`;
         if (currentQuestion >= dailyQuizQuestions.length)
         {
-            document.getElementById("currentQuizQuestion").style.display = "none";
+            quizQuestionCounter.style.display = "none";
             ShowRandomQuestion();
             doingDailyQuiz = false;
-            //End of daily quiz
+            leaderboardForm.style.display = "block";
         }
         else
         {
@@ -107,9 +111,8 @@ async function DailyQuizButton()
     if (doingDailyQuiz) return;
 
     currentQuestion = 0;
-    const currentQuestionText = document.getElementById("currentQuizQuestion");
-    currentQuestionText.style.display = "block";
-    currentQuestionText.textContent = `Current quiz question: ${currentQuestion + 1}`;
+    quizQuestionCounter.style.display = "block";
+    quizQuestionCounter.textContent = `Current quiz question: ${currentQuestion + 1}`;
     const response = await fetch("https://ivt-seminarka.uc.r.appspot.com/dailyQuiz");
     dailyQuizQuestions = await response.json();
     doingDailyQuiz = true;
@@ -142,11 +145,11 @@ async function LoadLeaderboard()
 
 async function SubmitScore()
 {
-    const form = document.getElementById("leaderboardForm");
-    const formData = new FormData(form);
+    const formData = new FormData(leaderboardForm);
     let name;
-    formData.forEach((v, k) => name = v);
+    name = formData.get("fname");
 
+    leaderboardForm.style.display = "none";
     score = 100;
 
     try
