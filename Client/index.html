@@ -9,19 +9,36 @@
     <body>
         <h1>Will it compile?</h1>
 
-        <h2 id="currentQuizQuestion">Current quiz question: 1</h2>
+        <div class="daily-quiz-question-container">
+            <div class="daily-quiz-question-icon">1</div>
+            <div class="daily-quiz-question-icon">2</div>
+            <div class="daily-quiz-question-icon">3</div>
+            <div class="daily-quiz-question-icon">4</div>
+            <div class="daily-quiz-question-icon">5</div>
+        </div>
 
         <div class="code-text-field"></div>
-        
+
         <div class="button-container">
             <button class="button button-correct">Correct</button>
             <button class="button button-incorrect">Incorrect</button>
         </div>
-        
+
         <button class="button button-dark" id="dailyQuizButton">Daily quiz</button>
 
         <div class="leaderboard">
             <h1>Leaderboard</h1>
+        </div>
+
+        <div class="dialog" id="dailyQuizDialog">
+            <h3 id="dailyQuizDialogScore">Score: 80</h3>
+            <h3 id="dailyQuizDialogTime">Time: 0:55</h3>
+
+            <form id="leaderboardForm" onsubmit="return false">
+                <label for="fname">Nickname:</label>
+                <input type="text" id="fname" name="fname"><br><br>
+                <input type="submit" value="Submit">
+            </form>
         </div>
 
         <div class="dialog dialog-correct">
@@ -34,12 +51,6 @@
             <button class="button" id="incorrectDialogButton">Next</button>
             <p id="errorExplanation"></p>
         </div>
-
-        <form id="leaderboardForm" onsubmit="return false">
-            <label for="fname">First name:</label>
-            <input type="text" id="fname" name="fname"><br><br>
-            <input type="submit" value="Submit">
-        </form>
 
         <script src="./script.js"></script>
     </body>

@@ -1,15 +1,20 @@
 let questions = [];
 let currentQuestion;
+let currentDailyQuestionIndex;
 let dailyQuizQuestions;
 let doingDailyQuiz = false;
+let dailyQuizCorrectAnswers = 0;
 
 const errorExplanation = document.getElementById("errorExplanation");
-const quizQuestionCounter = document.getElementById("currentQuizQuestion");
+const dailyQuizQuestionContainer = document.querySelector(".daily-quiz-question-container");
 const leaderboardForm = document.getElementById("leaderboardForm");
+const dailyQuizDialog = document.getElementById("dailyQuizDialog");
+const dailyQuizDialogScore = document.getElementById("dailyQuizDialogScore");
+const dailyQuizDialogTime = document.getElementById("dailyQuizDialogTime");
 
 async function LoadQuestions() 
 {
-    quizQuestionCounter.style.display = "none";
+    dailyQuizQuestionContainer.style.display = "none";
     questions = await fetch("./questions.json").then(response => response.json());
 
     ShowRandomQuestion();
@@ -50,9 +55,11 @@ function AddButtonListeners()
 function CorrectButton()
 {
     const dialogClass = currentQuestion.hasError ? ".dialog-incorrect" : ".dialog-correct";
-    document.querySelector(dialogClass).style.display = "block";
+    const dialogElement = document.querySelector(dialogClass);
+    dialogElement.style.display = "block";
+    dialogElement.style.transform = doingDailyQuiz ? "translate(-50%, 30%)" : "translate(-50%, -10%)";
 
-    if (currentQuestion.hasError)   
+    if (currentQuestion.hasError)
     {
         errorExplanation.innerText = currentQuestion.explanation;
     }
@@ -61,7 +68,9 @@ function CorrectButton()
 function IncorrectButton()
 {
     const dialogClass = currentQuestion.hasError ? ".dialog-correct" : ".dialog-incorrect";
-    document.querySelector(dialogClass).style.display = "block";
+    const dialogElement = document.querySelector(dialogClass);
+    dialogElement.style.display = "block";
+    dialogElement.style.transform = doingDailyQuiz ? "translate(-50%, 30%)" : "translate(-50%, -10%)";
 
     if (!currentQuestion.hasError)
     {
@@ -72,32 +81,41 @@ function IncorrectButton()
 function IncorrectDialogButton()
 {
     document.querySelector(".dialog-incorrect").style.display = "none";
-    ShowNextQuestion();
+    ShowNextQuestion(false);
 }
 
 function CorrectDialogButton()
 {
     document.querySelector(".dialog-correct").style.display = "none"
-    ShowNextQuestion();
+    ShowNextQuestion(true);
 }
 
-function ShowNextQuestion() 
+function ShowNextQuestion(correctAnswer) 
 {
     if (doingDailyQuiz)
     {
-        currentQuestion += 1;
-        quizQuestionCounter.textContent = `Current quiz question: ${currentQuestion + 1}`;
-        if (currentQuestion >= dailyQuizQuestions.length)
+        const lastQuestion = dailyQuizQuestionContainer.children[currentDailyQuestionIndex];
+        lastQuestion.style.border = "0px";
+        if (correctAnswer)
         {
-            quizQuestionCounter.style.display = "none";
-            ShowRandomQuestion();
-            doingDailyQuiz = false;
-            leaderboardForm.style.display = "block";
+            lastQuestion.style.background = "rgb(43, 153, 43)";
+            dailyQuizCorrectAnswers += 1;
         }
         else
         {
-            const questionIndex = dailyQuizQuestions[currentQuestion];
-            ShowQuestion(questions[questionIndex]);
+            lastQuestion.style.background = "rgb(172, 38, 38)";
+        }
+        currentDailyQuestionIndex += 1;
+        if (currentDailyQuestionIndex >= dailyQuizQuestions.length)
+        {
+            dailyQuizDialog.style.display = "block";
+            dailyQuizDialogScore.textContent = `Score: ${dailyQuizCorrectAnswers / 5 * 100}`;
+        }
+        else
+        {
+            dailyQuizQuestionContainer.children[currentDailyQuestionIndex].style.border = "2px solid gray";
+            currentQuestion = questions[dailyQuizQuestions[currentDailyQuestionIndex]];
+            ShowQuestion(currentQuestion);
         }
     }
     else
@@ -109,16 +127,17 @@ function ShowNextQuestion()
 async function DailyQuizButton()
 {
     if (doingDailyQuiz) return;
+    dailyQuizCorrectAnswers = 0;
+    doingDailyQuiz = true;
+    currentDailyQuestionIndex = 0;
 
-    currentQuestion = 0;
-    quizQuestionCounter.style.display = "block";
-    quizQuestionCounter.textContent = `Current quiz question: ${currentQuestion + 1}`;
+    dailyQuizQuestionContainer.style.display = "flex";
+    dailyQuizQuestionContainer.children[0].style.border = "2px solid gray";
     const response = await fetch("https://ivt-seminarka.uc.r.appspot.com/dailyQuiz");
     dailyQuizQuestions = await response.json();
-    doingDailyQuiz = true;
 
-    const dailyQuestionIndex = dailyQuizQuestions[0];
-    ShowQuestion(questions[dailyQuestionIndex]);
+    currentQuestion = questions[dailyQuizQuestions[0]];
+    ShowQuestion(currentQuestion);
 }
 
 async function LoadLeaderboard()
@@ -149,8 +168,11 @@ async function SubmitScore()
     let name;
     name = formData.get("fname");
 
-    leaderboardForm.style.display = "none";
-    score = 100;
+    dailyQuizQuestionContainer.style.display = "none";
+    ShowRandomQuestion();
+    doingDailyQuiz = false;
+    dailyQuizDialog.style.display = "none";
+    score = dailyQuizCorrectAnswers / 5 * 100;
 
     try
     {
@@ -177,6 +199,6 @@ function Delay(ms)
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-LoadLeaderboard();
 LoadQuestions();
+LoadLeaderboard();
 AddButtonListeners();

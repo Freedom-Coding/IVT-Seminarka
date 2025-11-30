@@ -1,6 +1,7 @@
 :root
 {
-    --lightGray-color: #2d3748;
+    --lightGray-color: #828ea1;
+    --gray-color: #2d3748;
     --darkGray-color: #192029;
     --shadow-color: rgba(0, 0, 0, 0.3);
 }
@@ -9,7 +10,7 @@ body
 {
     font-family: monospace;
     color: white;
-    background-color: var(--lightGray-color);
+    background-color: var(--gray-color);
 }
 
 h1
@@ -19,6 +20,29 @@ h1
     font-weight: bold;
     font-family: Helvetica, sans-serif;
     text-shadow: 6px 6px 8px rgba(0, 0, 0, 0.5);
+}
+
+input[type="text"]
+{
+    border-radius: 10px;
+    border-width: 0px;
+    width: 90%;
+    height: 30px;
+    margin-top: 10px;
+    padding-left: 10px;
+    font-size: medium;
+    background: var(--lightGray-color);
+}
+
+input[type="submit"]
+{
+    border-radius: 10px;
+    border-width: 0px;
+    width: 40%;
+    height: 35px;
+    margin-top: 10px;
+    font-size: medium;
+    background: var(--lightGray-color)
 }
 
 .code-text-field
@@ -37,6 +61,7 @@ h1
 
 .button
 {
+    background: var(--gray-color);
     color: white;
     padding: 10px 20px;
     font-size: 1.2rem;
@@ -44,24 +69,23 @@ h1
     border: none;
     cursor: pointer;
     box-shadow: 0px 4px 10px var(--shadow-color);
-    background-color: var(--lightGray-color);
 }
 
 .button-dark
 {
-    background-color: var(--darkGray-color);
+    background: var(--darkGray-color);
     margin: 30px;
     transform: translate(0px, -250px);
 }
 
 .button-correct
 {
-    background-color: rgb(43, 153, 43);
+    background: rgb(43, 153, 43);
 }
 
 .button-incorrect
 {
-    background-color: rgb(172, 38, 38);
+    background: rgb(172, 38, 38);
 }
 
 .button-container
@@ -78,7 +102,7 @@ h1
     position: fixed;
     top: 30%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, 30%);
     height: 170px;
     width: 200px;
     background: var(--darkGray-color);
@@ -92,12 +116,19 @@ h1
 
 .dialog-correct
 {
-    background-color: rgb(43, 153, 43);
+    background: rgb(43, 153, 43);
 }
 
 .dialog-incorrect
 {
-    background-color: rgb(172, 38, 38);
+    background: rgb(172, 38, 38);
+}
+
+#dailyQuizDialog
+{
+    transform: translate(-50%, 40%);
+    width: 15%;
+    height: 25%;
 }
 
 .line-number
@@ -118,8 +149,22 @@ h1
     transform: translate(0px, -250px);
 }
 
-form
+.daily-quiz-question-container
 {
-    /*display: none;*/
-    background-color: var(--lightGray-color);
+    display: flex;
+    justify-content: center;
+}
+
+.daily-quiz-question-icon
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--darkGray-color);
+    width: 50px;
+    height: 50px;
+    margin: 0 5px;
+    border-radius: 10px;
+    font-size: medium;
+    box-shadow: 0px 4px 10px var(--shadow-color);
 }

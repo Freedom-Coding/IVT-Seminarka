@@ -52,12 +52,22 @@ app.get("/dailyQuiz", async (req, res) =>
 {
     if (dailyQuiz == null)
     {
-        const [data] = await dailyQuizFile.download();
-        dailyQuiz = JSON.parse(data);
+        const [metadata] = await dailyQuizFile.getMetadata();
 
-        if (dailyQuiz.length == 0)
+        const updatedDate = new Date(metadata.updated);
+        const now = new Date();
+
+        const msInOneDay = 24 * 60 * 60 * 1000;
+        const isOlderThanOneDay = (now - updatedDate) > msInOneDay;
+
+        if (isOlderThanOneDay)
         {
-            GenerateDailyQuiz();
+            await GenerateDailyQuiz();
+        }
+        else
+        {
+            const [contents] = await dailyQuizFile.download();
+            dailyQuiz = JSON.parse(contents);
         }
     }
 
@@ -71,7 +81,11 @@ async function GenerateDailyQuiz()
 
     for (let i = 0; i < questionsCount; i++)
     {
-        const questionIndex = RandomRange(0, questions.length);
+        let questionIndex = RandomRange(0, questions.length);
+        while (dailyQuiz.includes(questionIndex))
+        {
+            questionIndex = RandomRange(0, questions.length);
+        }
         dailyQuiz.push(questionIndex);
     }
 
