@@ -38,10 +38,16 @@ app.get("/leaderboard", (req, res) =>
 
 app.post("/leaderboard", async (req, res) =>
 {
-    let { name, score } = req.body;
+    let { name, score, time } = req.body;
 
-    leaderboard.push({ name, score });
-    leaderboard.sort((a, b) => b.score - a.score);
+    leaderboard.push({ name, score, time });
+    leaderboard.sort((a, b) =>
+    {
+        const scoreDelta = b.score - a.score;
+        if (scoreDelta !== 0) return scoreDelta;
+
+        return a.time - b.time;
+    });
 
     await leaderboardFile.save(JSON.stringify(leaderboard), { contentType: "application/json" });
 

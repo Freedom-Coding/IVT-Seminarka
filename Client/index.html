@@ -9,7 +9,7 @@
     <body>
         <h1>Will it compile?</h1>
 
-        <div class="daily-quiz-question-container">
+        <div id="daily-quiz-question-container">
             <div class="daily-quiz-question-icon">1</div>
             <div class="daily-quiz-question-icon">2</div>
             <div class="daily-quiz-question-icon">3</div>
@@ -17,7 +17,9 @@
             <div class="daily-quiz-question-icon">5</div>
         </div>
 
-        <div class="code-text-field"></div>
+        <h2 id="timeCounter">0:00</h2>
+
+        <div id="code-text-field"></div>
 
         <div class="button-container">
             <button class="button button-correct">Correct</button>
@@ -26,7 +28,7 @@
 
         <button class="button button-dark" id="dailyQuizButton">Daily quiz</button>
 
-        <div class="leaderboard">
+        <div id="leaderboard">
             <h1>Leaderboard</h1>
         </div>
 
@@ -41,12 +43,12 @@
             </form>
         </div>
 
-        <div class="dialog dialog-correct">
+        <div class="dialog" id="dialog-correct">
             <p>Correct answer!</p>
             <button class="button" id="correctDialogButton">Next </button>
         </div>
 
-        <div class="dialog dialog-incorrect">
+        <div class="dialog" id="dialog-incorrect">
             <p>Wrong answer!</p>
             <button class="button" id="incorrectDialogButton">Next</button>
             <p id="errorExplanation"></p>

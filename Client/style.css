@@ -22,6 +22,11 @@ h1
     text-shadow: 6px 6px 8px rgba(0, 0, 0, 0.5);
 }
 
+h2
+{
+    text-align: center;
+}
+
 input[type="text"]
 {
     border-radius: 10px;
@@ -43,20 +48,6 @@ input[type="submit"]
     margin-top: 10px;
     font-size: medium;
     background: var(--lightGray-color)
-}
-
-.code-text-field
-{
-    height: 140px;
-    border-radius: 10px;
-    background: var(--darkGray-color);
-    white-space: pre;
-    margin-left: 40%;
-    margin-right: 40%;
-    margin-top: 30px;
-    padding: 20px;
-    font-size: large;
-    box-shadow: 0px 4px 10px var(--shadow-color);
 }
 
 .button
@@ -114,45 +105,11 @@ input[type="submit"]
     box-shadow: 0px 4px 10px var(--shadow-color);
 }
 
-.dialog-correct
-{
-    background: rgb(43, 153, 43);
-}
-
-.dialog-incorrect
-{
-    background: rgb(172, 38, 38);
-}
-
-#dailyQuizDialog
-{
-    transform: translate(-50%, 40%);
-    width: 15%;
-    height: 25%;
-}
-
 .line-number
 {
     color: rgb(103, 115, 136);
     user-select: none;
     margin-right: 20px;
-}
-
-.leaderboard
-{
-    background: var(--darkGray-color);
-    width: 20%;
-    padding: 15px;
-    box-shadow: 0px 4px 10px var(--shadow-color);
-    border-radius: 10px;
-    font-size: large;
-    transform: translate(0px, -250px);
-}
-
-.daily-quiz-question-container
-{
-    display: flex;
-    justify-content: center;
 }
 
 .daily-quiz-question-icon
@@ -167,4 +124,52 @@ input[type="submit"]
     border-radius: 10px;
     font-size: medium;
     box-shadow: 0px 4px 10px var(--shadow-color);
+}
+
+#dialog-correct
+{
+    background: rgb(43, 153, 43);
+}
+
+#dialog-incorrect
+{
+    background: rgb(172, 38, 38);
+}
+
+#dailyQuizDialog
+{
+    transform: translate(-50%, 40%);
+    width: 15%;
+    height: 25%;
+}
+
+#code-text-field
+{
+    height: 140px;
+    border-radius: 10px;
+    background: var(--darkGray-color);
+    white-space: pre;
+    margin-left: 40%;
+    margin-right: 40%;
+    margin-top: 30px;
+    padding: 20px;
+    font-size: large;
+    box-shadow: 0px 4px 10px var(--shadow-color);
+}
+
+#leaderboard
+{
+    background: var(--darkGray-color);
+    width: 20%;
+    padding: 15px;
+    box-shadow: 0px 4px 10px var(--shadow-color);
+    border-radius: 10px;
+    font-size: large;
+    transform: translate(0px, -250px);
+}
+
+#daily-quiz-question-container
+{
+    display: flex;
+    justify-content: center;
 }
