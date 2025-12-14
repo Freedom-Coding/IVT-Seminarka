@@ -7,54 +7,73 @@
     </head>
 
     <body>
-        <h1>Will it compile?</h1>
+        <div class="page">
+            <!-- LEFT SIDE -->
+            <aside class="sidebar" id="sidebar-left">
+                <button class="button button-dark" id="daily-quiz-button">Daily quiz</button>
 
-        <div id="daily-quiz-question-container">
-            <div class="daily-quiz-question-icon">1</div>
-            <div class="daily-quiz-question-icon">2</div>
-            <div class="daily-quiz-question-icon">3</div>
-            <div class="daily-quiz-question-icon">4</div>
-            <div class="daily-quiz-question-icon">5</div>
+                <div class="container">
+                    <h2>Leaderboard</h2>
+                    <p id="leaderboard"></p>
+                </div>
+            </aside>
+
+            <!-- MIDDLE -->
+            <main class="center">
+                <h1>Will it compile?</h1>
+
+                <div id="daily-quiz-question-container">
+                    <div class="daily-quiz-question-icon container">1</div>
+                    <div class="daily-quiz-question-icon container">2</div>
+                    <div class="daily-quiz-question-icon container">3</div>
+                    <div class="daily-quiz-question-icon container">4</div>
+                    <div class="daily-quiz-question-icon container">5</div>
+                </div>
+
+                <h2 id="time-counter">0:00</h2>
+
+                <div class="container" id="code-text-field"></div>
+
+                <div class="button-container">
+                    <button class="button button-correct">Correct</button>
+                    <button class="button button-incorrect">Incorrect</button>
+                </div>
+            </main>
+
+            <!-- RIGHT SIDE -->
+            <aside class="sidebar" id="sidebar-right">
+                <div class="container">
+                    <h2>Statistics</h2>
+                    <p id="statistics-time">Average answer time: ?</p>
+                    <p id="statistics-success-rate">Success rate: ?</p>
+                </div>
+            </aside>
+
+            <!-- OVERLAYS -->
+            <div class="dialog container" id="daily-quiz-dialog">
+                <h3 id="daily-quiz-dialog-score">Score: </h3>
+                <h3 id="daily-quiz-dialog-time">Time: </h3>
+
+                <form id="leaderboard-form" onsubmit="return false">
+                    <label for="fname">Nickname:</label>
+                    <input type="text" id="fname" name="fname"><br><br>
+                    <input type="submit" value="Submit">
+                </form>
+            </div>
+
+            <div class="dialog container" id="dialog-correct">
+                <p>Correct answer!</p>
+                <button class="button" id="correct-dialog-button">Next </button>
+            </div>
+
+            <div class="dialog container" id="dialog-incorrect">
+                <p>Wrong answer!</p>
+                <button class="button" id="incorrect-dialog-button">Next</button>
+                <p id="error-explanation"></p>
+            </div>
+
+            <script type="module" src="script.js"></script>
         </div>
-
-        <h2 id="timeCounter">0:00</h2>
-
-        <div id="code-text-field"></div>
-
-        <div class="button-container">
-            <button class="button button-correct">Correct</button>
-            <button class="button button-incorrect">Incorrect</button>
-        </div>
-
-        <button class="button button-dark" id="dailyQuizButton">Daily quiz</button>
-
-        <div id="leaderboard">
-            <h1>Leaderboard</h1>
-        </div>
-
-        <div class="dialog" id="dailyQuizDialog">
-            <h3 id="dailyQuizDialogScore">Score: 80</h3>
-            <h3 id="dailyQuizDialogTime">Time: 0:55</h3>
-
-            <form id="leaderboardForm" onsubmit="return false">
-                <label for="fname">Nickname:</label>
-                <input type="text" id="fname" name="fname"><br><br>
-                <input type="submit" value="Submit">
-            </form>
-        </div>
-
-        <div class="dialog" id="dialog-correct">
-            <p>Correct answer!</p>
-            <button class="button" id="correctDialogButton">Next </button>
-        </div>
-
-        <div class="dialog" id="dialog-incorrect">
-            <p>Wrong answer!</p>
-            <button class="button" id="incorrectDialogButton">Next</button>
-            <p id="errorExplanation"></p>
-        </div>
-
-        <script src="./script.js"></script>
     </body>
 
 </html>

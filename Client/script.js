@@ -1,21 +1,32 @@
+import { Utils } from './utils.js';
+
+const ANSWERED_QUESTIONS = "answeredQuestions";
+const ANSWER_TIME = "answerTime";
+const CORRECT_ANSWERS = "correctAnswers";
+const timer = new Utils.Timer();
+
 let questions = [];
 let currentQuestion;
 let currentDailyQuestionIndex;
 let dailyQuizQuestions;
 let doingDailyQuiz = false;
 let dailyQuizCorrectAnswers = 0;
-let currentTimer = 0;
+let answeredQuestions = 0;
+let correctAnswers = 0;
+let answerTime = 0;
 
 const dailyQuizQuestionContainer = document.getElementById("daily-quiz-question-container");
-const errorExplanation = document.getElementById("errorExplanation");
-const leaderboardForm = document.getElementById("leaderboardForm");
-const dailyQuizDialog = document.getElementById("dailyQuizDialog");
-const dailyQuizDialogScore = document.getElementById("dailyQuizDialogScore");
-const dailyQuizDialogTime = document.getElementById("dailyQuizDialogTime");
-const timeCounter = document.getElementById("timeCounter");
+const errorExplanation = document.getElementById("error-explanation");
+const leaderboardForm = document.getElementById("leaderboard-form");
+const dailyQuizDialog = document.getElementById("daily-quiz-dialog");
+const dailyQuizDialogScore = document.getElementById("daily-quiz-dialog-score");
+const dailyQuizDialogTime = document.getElementById("daily-quiz-dialog-time");
+const timeCounter = document.getElementById("time-counter");
 const dialogIncorrect = document.getElementById("dialog-incorrect");
 const dialogCorrect = document.getElementById("dialog-correct");
 const leaderboard = document.getElementById("leaderboard");
+const statisticsTime = document.getElementById("statistics-time");
+const statisticsSuccessRate = document.getElementById("statistics-success-rate");
 
 function AddButtonListeners()
 {
@@ -23,9 +34,39 @@ function AddButtonListeners()
 
     document.querySelector(".button-correct").addEventListener("click", CorrectButton);
     document.querySelector(".button-incorrect").addEventListener("click", IncorrectButton);
-    document.getElementById("correctDialogButton").addEventListener("click", CorrectDialogButton);
-    document.getElementById("incorrectDialogButton").addEventListener("click", IncorrectDialogButton);
-    document.getElementById("dailyQuizButton").addEventListener("click", DailyQuizButton);
+    document.getElementById("correct-dialog-button").addEventListener("click", CorrectDialogButton);
+    document.getElementById("incorrect-dialog-button").addEventListener("click", IncorrectDialogButton);
+    document.getElementById("daily-quiz-button").addEventListener("click", DailyQuizButton);
+}
+
+function InitializeStatistics()
+{
+    answeredQuestions = Number(localStorage.getItem(ANSWERED_QUESTIONS));
+    correctAnswers = Number(localStorage.getItem(CORRECT_ANSWERS));
+    answerTime = Number(localStorage.getItem(ANSWER_TIME));
+
+    if (answeredQuestions == null || correctAnswers == null || answerTime == null)
+    {
+        answeredQuestions = 0;
+        correctAnswers = 0;
+        answerTime = 0;
+        localStorage.setItem(ANSWERED_QUESTIONS, 0);
+        localStorage.setItem(CORRECT_ANSWERS, 0);
+        localStorage.setItem(ANSWER_TIME, 0);
+    }
+    else if (answeredQuestions != 0)
+    {
+        UpdateStatistics();
+    }
+}
+
+function UpdateStatistics()
+{
+    localStorage.setItem(ANSWERED_QUESTIONS, answeredQuestions);
+    localStorage.setItem(CORRECT_ANSWERS, correctAnswers);
+    localStorage.setItem(ANSWER_TIME, answerTime);
+    statisticsSuccessRate.textContent = `Success rate: ${(correctAnswers / answeredQuestions * 100).toFixed(1)}%`;
+    statisticsTime.innerHTML = Utils.formatDuration(Math.floor(answerTime / answeredQuestions));
 }
 
 async function LoadQuestions() 
@@ -39,10 +80,12 @@ async function LoadQuestions()
 
 function ShowRandomQuestion()
 {
+    timer.onTick = null;
+    timer.start();
     let randomQuestion = null;
     do
     {
-        randomQuestion = questions[RandomRange(0, questions.length)];
+        randomQuestion = questions[Utils.RandomRange(0, questions.length)];
     }
     while (randomQuestion == currentQuestion);
 
@@ -73,6 +116,12 @@ function IncorrectButton()
 
 function ShowQuestionDialog(dialogElement)
 {
+    if (!doingDailyQuiz)
+    {
+        answerTime += timer.getTime();
+        timer.reset();
+    }
+
     dialogElement.style.display = "block";
     dialogElement.style.transform = doingDailyQuiz ? "translate(-50%, 30%)" : "translate(-50%, -10%)";
 }
@@ -91,6 +140,10 @@ function CorrectDialogButton()
 
 function ShowNextQuestion(correctAnswer) 
 {
+    answeredQuestions++;
+    if (correctAnswer) correctAnswers++;
+    UpdateStatistics();
+
     if (doingDailyQuiz)
     {
         const lastQuestion = dailyQuizQuestionContainer.children[currentDailyQuestionIndex];
@@ -107,8 +160,11 @@ function ShowNextQuestion(correctAnswer)
         currentDailyQuestionIndex += 1;
         if (currentDailyQuestionIndex >= dailyQuizQuestions.length)
         {
+            answerTime += timer.getTime();
+            timer.reset();
             dailyQuizDialog.style.display = "block";
             dailyQuizDialogScore.textContent = `Score: ${dailyQuizCorrectAnswers / 5 * 100}`;
+            dailyQuizDialogTime.textContent = `Time: ${timer.getTimeString()}`;
         }
         else
         {
@@ -126,29 +182,32 @@ async function DailyQuizButton()
 {
     if (doingDailyQuiz) return;
     doingDailyQuiz = true;
+    timer.reset();
     dailyQuizCorrectAnswers = 0;
     currentDailyQuestionIndex = 0;
+    for (let i = 0; i < 5; i++)
+    {
+        const question = dailyQuizQuestionContainer.children[i];
+        question.style.border = "0px";
+        question.style.background = "#192029";
+    }
 
     dailyQuizQuestionContainer.style.display = "flex";
     dailyQuizQuestionContainer.children[0].style.border = "2px solid gray";
+    timeCounter.style.display = "block";
+
     const response = await fetch("https://ivt-seminarka.uc.r.appspot.com/dailyQuiz");
     dailyQuizQuestions = await response.json();
-    UpdateTimer();
+    timer.onTick = () =>
+    {
+        if (currentDailyQuestionIndex < dailyQuizQuestions.length)
+        {
+            timeCounter.innerHTML = timer.getTimeString();
+        }
+    }
+    timer.start();
 
     ShowQuestion(questions[dailyQuizQuestions[0]]);
-}
-
-async function UpdateTimer()
-{
-    timeCounter.style.display = "block";
-    currentTimer = 0;
-
-    while (currentDailyQuestionIndex < dailyQuizQuestions.length)
-    {
-        await Delay(1000);
-        currentTimer++;
-        timeCounter.innerHTML = GetDurationString(currentTimer);
-    }
 }
 
 async function LoadLeaderboard()
@@ -158,11 +217,12 @@ async function LoadLeaderboard()
         const response = await fetch("https://ivt-seminarka.uc.r.appspot.com/leaderboard");
         const leaderboardData = await response.json();
 
+        leaderboard.textContent = leaderboardData.length > 0 ? "" : "Nobody did today's quiz.";
+
         leaderboardData.forEach((entry, index) =>
         {
-            const div = document.createElement("div");
-            div.textContent = `${index + 1}. ${entry.name} - ${entry.score}% - ${GetDurationString(entry.time)}`;
-            leaderboard.appendChild(div);
+            const content = `${index + 1}. ${entry.name} - ${entry.score}% - ${Utils.formatDuration(entry.time)}`;
+            leaderboard.textContent += content + "\n";
         });
     }
     catch (err)
@@ -182,7 +242,7 @@ async function SubmitScore()
     doingDailyQuiz = false;
     dailyQuizDialog.style.display = "none";
     timeCounter.style.display = "none";
-    score = dailyQuizCorrectAnswers / 5 * 100;
+    const score = dailyQuizCorrectAnswers / 5 * 100;
 
     try
     {
@@ -190,8 +250,10 @@ async function SubmitScore()
             {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name, score, time: currentTimer })
+                body: JSON.stringify({ name, score, time: timer.currentTime })
             });
+
+        LoadLeaderboard();
     }
     catch (err)
     {
@@ -199,23 +261,7 @@ async function SubmitScore()
     }
 }
 
-function RandomRange(min, max)
-{
-    return Math.floor(Math.random() * (max - min)) + min;
-}
-
-function Delay(ms)
-{
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-function GetDurationString(duration)
-{
-    const minutes = Math.floor(duration / 60);
-    const seconds = duration % 60;
-    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-}
-
+InitializeStatistics();
 LoadQuestions();
 LoadLeaderboard();
 AddButtonListeners();

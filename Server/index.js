@@ -96,6 +96,9 @@ async function GenerateDailyQuiz()
     }
 
     await dailyQuizFile.save(JSON.stringify(dailyQuiz), { contentType: "application/json" });
+
+    leaderboard = [];
+    await leaderboardFile.save(JSON.stringify(leaderboard), { contentType: "application/json" });
 }
 
 async function LoadQuestions()
