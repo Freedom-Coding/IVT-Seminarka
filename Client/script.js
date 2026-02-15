@@ -1,9 +1,11 @@
-import { Utils } from './utils.js';
+import { Timer, Utils } from './utils.js';
 
+//Názvy "proměnných" v localStorage
 const ANSWERED_QUESTIONS = "answeredQuestions";
 const ANSWER_TIME = "answerTime";
 const CORRECT_ANSWERS = "correctAnswers";
-const timer = new Utils.Timer();
+//Časovač
+const timer = new Timer();
 
 let questions = [];
 let currentQuestion;

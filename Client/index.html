@@ -8,7 +8,8 @@
 
     <body>
         <div class="page">
-            <!-- LEFT SIDE -->
+
+            <!-- Levá část - žebříček uživatelů -->
             <aside class="sidebar" id="sidebar-left">
                 <button class="button button-dark" id="daily-quiz-button">Daily quiz</button>
 
@@ -18,10 +19,11 @@
                 </div>
             </aside>
 
-            <!-- MIDDLE -->
+            <!-- Prostřední část -->
             <main class="center">
                 <h1>Will it compile?</h1>
 
+                <!-- Indikace otázek denního kvízu -->
                 <div id="daily-quiz-question-container">
                     <div class="daily-quiz-question-icon container">1</div>
                     <div class="daily-quiz-question-icon container">2</div>
@@ -30,17 +32,20 @@
                     <div class="daily-quiz-question-icon container">5</div>
                 </div>
 
+                <!-- Časovač -->
                 <h2 id="time-counter">0:00</h2>
 
+                <!-- Úryvek kódu -->
                 <div class="container" id="code-text-field"></div>
 
+                <!-- Výběr odpovědi (kód obsahuje/neobsahuje chybu) -->
                 <div class="button-container">
                     <button class="button button-correct">Correct</button>
                     <button class="button button-incorrect">Incorrect</button>
                 </div>
             </main>
 
-            <!-- RIGHT SIDE -->
+            <!-- Pravá část - statistiky -->
             <aside class="sidebar" id="sidebar-right">
                 <div class="container">
                     <h2>Statistics</h2>
@@ -49,7 +54,7 @@
                 </div>
             </aside>
 
-            <!-- OVERLAYS -->
+            <!-- Dialog po splnění denního kvízu -->
             <div class="dialog container" id="daily-quiz-dialog">
                 <h3 id="daily-quiz-dialog-score">Score: </h3>
                 <h3 id="daily-quiz-dialog-time">Time: </h3>
@@ -61,11 +66,13 @@
                 </form>
             </div>
 
+            <!-- Dialog po vybrání správné odpovědi -->
             <div class="dialog container" id="dialog-correct">
                 <p>Correct answer!</p>
-                <button class="button" id="correct-dialog-button">Next </button>
+                <button class="button" id="correct-dialog-button">Next</button>
             </div>
 
+            <!-- Dialog po vybrání špatné odpovědi -->
             <div class="dialog container" id="dialog-incorrect">
                 <p>Wrong answer!</p>
                 <button class="button" id="incorrect-dialog-button">Next</button>

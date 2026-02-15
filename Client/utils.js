@@ -1,52 +1,52 @@
+export class Timer
+{
+    constructor()
+    {
+        this.currentTime = 0;
+        this.intervalId = null;
+        this.onTick = null;
+    }
+
+    start()
+    {
+        if (this.intervalId) return;
+        this.intervalId = setInterval(() =>
+        {
+            this.currentTime++;
+            if (typeof this.onTick === "function")
+            {
+                this.onTick(this.currentTime);
+            }
+        }, 1000);
+    }
+
+    stop()
+    {
+        clearInterval(this.intervalId);
+        this.intervalId = null;
+    }
+
+    reset()
+    {
+        this.stop();
+        this.currentTime = 0;
+    }
+
+    getTime()
+    {
+        return this.currentTime;
+    }
+
+    getTimeString()
+    {
+        const minutes = Math.floor(this.currentTime / 60);
+        const seconds = this.currentTime % 60;
+        return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    }
+}
+
 export class Utils
 {
-    static Timer = class
-    {
-        constructor()
-        {
-            this.currentTime = 0;
-            this.intervalId = null;
-            this.onTick = null;
-        }
-
-        start()
-        {
-            if (this.intervalId) return;
-            this.intervalId = setInterval(() =>
-            {
-                this.currentTime++;
-                if (typeof this.onTick === "function")
-                {
-                    this.onTick(this.currentTime);
-                }
-            }, 1000);
-        }
-
-        stop()
-        {
-            clearInterval(this.intervalId);
-            this.intervalId = null;
-        }
-
-        reset()
-        {
-            this.stop();
-            this.currentTime = 0;
-        }
-
-        getTime()
-        {
-            return this.currentTime;
-        }
-
-        getTimeString()
-        {
-            const minutes = Math.floor(this.currentTime / 60);
-            const seconds = this.currentTime % 60;
-            return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-        }
-    };
-
     static formatDuration(duration)
     {
         const min = Math.floor(duration / 60);
