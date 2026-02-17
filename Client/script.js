@@ -163,7 +163,7 @@ function ShowNextQuestion(correctAnswer)
         if (currentDailyQuestionIndex >= dailyQuizQuestions.length)
         {
             answerTime += timer.getTime();
-            timer.reset();
+            timer.stop();
             dailyQuizDialog.style.display = "block";
             dailyQuizDialogScore.textContent = `Score: ${dailyQuizCorrectAnswers / 5 * 100}`;
             dailyQuizDialogTime.textContent = `Time: ${timer.getTimeString()}`;
@@ -261,6 +261,8 @@ async function SubmitScore()
     {
         console.error("Failed to submit score.", err);
     }
+
+    timer.reset();
 }
 
 InitializeStatistics();
