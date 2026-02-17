@@ -11,11 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 //Konfigurace Google Storage
-const storage = new Storage(
-    {
-        keyFilename: "./ivt-seminarka-b84956c46406.json",
-        projectId: "ivt-seminarka"
-    });
+const storage = new Storage();
 
 //Složka se soubory na Google Cloud Storage
 const storageBucket = storage.bucket("ivt_seminarka");
