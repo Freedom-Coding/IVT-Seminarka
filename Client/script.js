@@ -141,31 +141,36 @@ function IncorrectButton()
     if (!currentQuestion.hasError) errorExplanation.innerText = "There are no errors in this code.";
 }
 
-//Zobrazení dialogu po odpovězení na otázku
-function ShowQuestionDialog(dialogElement)
-{
-    if (!doingDailyQuiz)
-    {
-        answerTime += timer.getTime();
-        timer.reset();
-    }
-
-    dialogElement.style.display = "block";
-    dialogElement.style.transform = doingDailyQuiz ? "translate(-50%, 30%)" : "translate(-50%, -10%)";
-}
-
+//Po stisknutí tlačítka v dialogu při špatné odpovědi
 function IncorrectDialogButton()
 {
     dialogIncorrect.style.display = "none";
     ShowNextQuestion(false);
 }
 
+//Po stisknutí tlačítka v dialogu při správné odpovědi
 function CorrectDialogButton()
 {
     dialogCorrect.style.display = "none"
     ShowNextQuestion(true);
 }
 
+//Zobrazení dialogu po odpovězení na otázku
+function ShowQuestionDialog(dialogElement)
+{
+    if (!doingDailyQuiz)
+    {
+        //V případě, že si uživatel nevybral denní kvíz, časovač se po každé otázce resetuje
+        answerTime += timer.getTime();
+        timer.reset();
+    }
+
+    //Zobrazení elementu dialogu
+    dialogElement.style.display = "block";
+    dialogElement.style.transform = doingDailyQuiz ? "translate(-50%, 30%)" : "translate(-50%, -10%)";
+}
+
+//Zobrazení další otázky
 function ShowNextQuestion(correctAnswer) 
 {
     answeredQuestions++;
@@ -176,6 +181,8 @@ function ShowNextQuestion(correctAnswer)
     {
         const lastQuestion = dailyQuizQuestionContainer.children[currentDailyQuestionIndex];
         lastQuestion.style.border = "0px";
+
+        //Nastavení barvy splněné otázky (zelená - správně, červená - špatně)
         if (correctAnswer)
         {
             lastQuestion.style.background = "rgb(43, 153, 43)";
@@ -185,27 +192,33 @@ function ShowNextQuestion(correctAnswer)
         {
             lastQuestion.style.background = "rgb(172, 38, 38)";
         }
+
         currentDailyQuestionIndex += 1;
         if (currentDailyQuestionIndex >= dailyQuizQuestions.length)
         {
+            //Zastavení časovače
             answerTime += timer.getTime();
             timer.stop();
+            //Zobrazení dialogu po dokončení denního kvízu
             dailyQuizDialog.style.display = "block";
             dailyQuizDialogScore.textContent = `Score: ${dailyQuizCorrectAnswers / 5 * 100}`;
             dailyQuizDialogTime.textContent = `Time: ${timer.getTimeString()}`;
         }
         else
         {
+            //Zobrazení další otázky
             dailyQuizQuestionContainer.children[currentDailyQuestionIndex].style.border = "2px solid gray";
             ShowQuestion(questions[dailyQuizQuestions[currentDailyQuestionIndex]]);
         }
     }
     else
     {
+        //Zobrazení náhodné otázky v případě, že uživatel nedělá denní kvíz
         ShowRandomQuestion();
     }
 }
 
+//Po stisknutí tlačítka pro denní kvíz
 async function DailyQuizButton()
 {
     if (doingDailyQuiz) return;
@@ -213,6 +226,8 @@ async function DailyQuizButton()
     timer.reset();
     dailyQuizCorrectAnswers = 0;
     currentDailyQuestionIndex = 0;
+
+    //Resetování vizuálu otázek (všechny jsou zatím nesplněné)
     for (let i = 0; i < 5; i++)
     {
         const question = dailyQuizQuestionContainer.children[i];
@@ -220,14 +235,19 @@ async function DailyQuizButton()
         question.style.background = "#192029";
     }
 
+    //Zobrazení vizuálu otázek
     dailyQuizQuestionContainer.style.display = "flex";
+    //Zobrazení aktuální otázky
     dailyQuizQuestionContainer.children[0].style.border = "2px solid gray";
+    //Zobrazení časovače
     timeCounter.style.display = "block";
 
+    //Načtení otázek denního kvízu ze serveru
     const response = await fetch("https://ivt-seminarka.uc.r.appspot.com/dailyQuiz");
     dailyQuizQuestions = await response.json();
     timer.onTick = () =>
     {
+        //Aktualizace textu časovače
         if (currentDailyQuestionIndex < dailyQuizQuestions.length)
         {
             timeCounter.innerHTML = timer.getTimeString();
@@ -235,9 +255,11 @@ async function DailyQuizButton()
     }
     timer.start();
 
+    //Zobrazení první otázky
     ShowQuestion(questions[dailyQuizQuestions[0]]);
 }
 
+//Načtení žebříčku uživatelů
 async function LoadLeaderboard()
 {
     try
@@ -247,6 +269,7 @@ async function LoadLeaderboard()
 
         leaderboard.textContent = leaderboardData.length > 0 ? "" : "Nobody did today's quiz.";
 
+        //Zobrazení dat přijatých ze serveru
         leaderboardData.forEach((entry, index) =>
         {
             const content = `${index + 1}. ${entry.name} - ${entry.score}% - ${Utils.formatDuration(entry.time)}`;
@@ -259,12 +282,14 @@ async function LoadLeaderboard()
     }
 }
 
+//Uložení skóre do žebříčku
 async function SubmitScore()
 {
     const formData = new FormData(leaderboardForm);
     let name;
     name = formData.get("fname");
 
+    //Zobrazení další náhodné otázky po splnění denního kvízu
     dailyQuizQuestionContainer.style.display = "none";
     ShowRandomQuestion();
     doingDailyQuiz = false;
@@ -274,6 +299,7 @@ async function SubmitScore()
 
     try
     {
+        //Odeslání dat o uživateli serveru (přezdívka, skóre a čas)
         await fetch("https://ivt-seminarka.uc.r.appspot.com/leaderboard",
             {
                 method: "POST",
