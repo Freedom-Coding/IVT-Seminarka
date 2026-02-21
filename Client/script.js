@@ -7,16 +7,17 @@ const CORRECT_ANSWERS = "correctAnswers";
 //Časovač
 const timer = new Timer();
 
-let questions = [];
-let currentQuestion;
-let currentDailyQuestionIndex;
-let dailyQuizQuestions;
-let doingDailyQuiz = false;
-let dailyQuizCorrectAnswers = 0;
-let answeredQuestions = 0;
-let correctAnswers = 0;
-let answerTime = 0;
+let questions = []; //Otázky načtené z JSON
+let currentQuestion; //Aktuální otázka
+let currentDailyQuestionIndex; //Pořadí aktuální otazky dne (0 až 4) 
+let dailyQuizQuestions; //Otázky denního kvízu přijaté ze serveru
+let doingDailyQuiz = false; //Vyplňuje aktuálně uživatel denní kvíz?
+let dailyQuizCorrectAnswers = 0; //Počet správných odpovědí v denním kvízu
+let answeredQuestions = 0; //Celkem odpovězených otázek
+let correctAnswers = 0; //Celkem správných odpovědí
+let answerTime = 0; //Celkový čas, který uživatel strávil odpovídáním na otázky
 
+//Získání potřebných elementů dle ID
 const dailyQuizQuestionContainer = document.getElementById("daily-quiz-question-container");
 const errorExplanation = document.getElementById("error-explanation");
 const leaderboardForm = document.getElementById("leaderboard-form");
@@ -30,25 +31,29 @@ const leaderboard = document.getElementById("leaderboard");
 const statisticsTime = document.getElementById("statistics-time");
 const statisticsSuccessRate = document.getElementById("statistics-success-rate");
 
+//Nastavení funkcí, které se spustí po stisku tlačítek
 function AddButtonListeners()
 {
     leaderboardForm.addEventListener("submit", SubmitScore);
 
-    document.querySelector(".button-correct").addEventListener("click", CorrectButton);
-    document.querySelector(".button-incorrect").addEventListener("click", IncorrectButton);
+    document.getElementById("button-correct").addEventListener("click", CorrectButton);
+    document.getElementById("button-incorrect").addEventListener("click", IncorrectButton);
     document.getElementById("correct-dialog-button").addEventListener("click", CorrectDialogButton);
     document.getElementById("incorrect-dialog-button").addEventListener("click", IncorrectDialogButton);
     document.getElementById("daily-quiz-button").addEventListener("click", DailyQuizButton);
 }
 
+//Inicializace statistik
 function InitializeStatistics()
 {
+    //Načtení statistik z local storage
     answeredQuestions = Number(localStorage.getItem(ANSWERED_QUESTIONS));
     correctAnswers = Number(localStorage.getItem(CORRECT_ANSWERS));
     answerTime = Number(localStorage.getItem(ANSWER_TIME));
 
     if (answeredQuestions == null || correctAnswers == null || answerTime == null)
     {
+        //V případě, že nejsou uloženy žádné statistiky, nastaví se proměnné na 0
         answeredQuestions = 0;
         correctAnswers = 0;
         answerTime = 0;
@@ -58,33 +63,44 @@ function InitializeStatistics()
     }
     else if (answeredQuestions != 0)
     {
+        //Zobrazení uložených statistik
         UpdateStatistics();
     }
 }
 
+//Aktualizace statistik
 function UpdateStatistics()
 {
+    //Uložení nových hodnot statistik
     localStorage.setItem(ANSWERED_QUESTIONS, answeredQuestions);
     localStorage.setItem(CORRECT_ANSWERS, correctAnswers);
     localStorage.setItem(ANSWER_TIME, answerTime);
+
+    //Zobrazení nových hodnot statistik
     statisticsSuccessRate.textContent = `Success rate: ${(correctAnswers / answeredQuestions * 100).toFixed(1)}%`;
     statisticsTime.innerHTML = Utils.formatDuration(Math.floor(answerTime / answeredQuestions));
 }
 
+//Inicializace otázek
 async function LoadQuestions() 
 {
+    //Vypnutí elementů denního kvízu
     timeCounter.style.display = "none";
     dailyQuizQuestionContainer.style.display = "none";
 
+    //Načtení otázek
     questions = await fetch("./questions.json").then(response => response.json());
     ShowRandomQuestion();
 }
 
+//Výběr a zobrazení náhodné otázky
 function ShowRandomQuestion()
 {
     timer.onTick = null;
     timer.start();
     let randomQuestion = null;
+
+    //Výběr náhodné otázky, která je jiná, než předchozí otázka
     do
     {
         randomQuestion = questions[Utils.RandomRange(0, questions.length)];
@@ -94,28 +110,38 @@ function ShowRandomQuestion()
     ShowQuestion(randomQuestion);
 }
 
+//Zobrazení otázky
 function ShowQuestion(question)
 {
     currentQuestion = question;
+    //Oddělení řádků
     const lines = question.code.split("\n");
+    //Přídání čísel řádků
     const formatted = lines
         .map((line, index) => `<span class="line-number">${index + 1}</span>${line}`)
         .join("\n");
     document.getElementById("code-text-field").innerHTML = formatted;
 }
 
+//Po stisknutí tlačítka pro správnou odpověď
 function CorrectButton()
 {
+    //Zobrazení dialogu podle toho, zda uživatel odpověděl správně
     ShowQuestionDialog(currentQuestion.hasError ? dialogIncorrect : dialogCorrect);
+    //Zobrazení vysvětlivky chyby
     if (currentQuestion.hasError) errorExplanation.innerText = currentQuestion.explanation;
 }
 
+//Po stisknutí tlačítka pro špatnou odpověď
 function IncorrectButton()
 {
+    //Zobrazení dialogu podle toho, zda uživatel odpověděl správně
     ShowQuestionDialog(currentQuestion.hasError ? dialogCorrect : dialogIncorrect);
+    //Zobrazení vysvětlivky chyby
     if (!currentQuestion.hasError) errorExplanation.innerText = "There are no errors in this code.";
 }
 
+//Zobrazení dialogu po odpovězení na otázku
 function ShowQuestionDialog(dialogElement)
 {
     if (!doingDailyQuiz)

@@ -55,6 +55,7 @@ input[type="submit"]
     height: 35px;
 }
 
+/* Tlačítko */
 .button
 {
     background: var(--gray-color);
@@ -67,29 +68,13 @@ input[type="submit"]
     box-shadow: 0px 4px 10px var(--shadow-color);
 }
 
+/* Tmavé tlačítko */
 .button-dark
 {
     background: var(--darkGray-color);
 }
 
-.button-correct
-{
-    background: rgb(43, 153, 43);
-}
-
-.button-incorrect
-{
-    background: rgb(172, 38, 38);
-}
-
-.button-container
-{
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    padding-top: 40px;
-}
-
+/* Společný styl pro všechny elementy typu div */
 .container
 {
     background: var(--darkGray-color);
@@ -100,6 +85,7 @@ input[type="submit"]
     padding: 25px 30px;
 }
 
+/* Společný styl pro všechny dialogy */
 .dialog
 {
     display: none;
@@ -112,6 +98,7 @@ input[type="submit"]
     z-index: 1000;
 }
 
+/* Číslo řádku úryvku kódu */
 .line-number
 {
     color: rgb(103, 115, 136);
@@ -119,6 +106,7 @@ input[type="submit"]
     margin-right: 20px;
 }
 
+/* Číslo otázky denního kvízu */
 .daily-quiz-question-icon
 {
     display: flex;
@@ -130,6 +118,7 @@ input[type="submit"]
     font-size: medium;
 }
 
+/* Společný styl levé a pravé části obrazovky */
 .sidebar
 {
     display: flex;
@@ -138,7 +127,8 @@ input[type="submit"]
     flex: 1;
 }
 
-.page
+/* Div obsahující levý, prostřední a pravý sloupec stránky = vše, co stránka obsahuje */
+#page
 {
     display: flex;
     align-items: flex-start;
@@ -147,31 +137,58 @@ input[type="submit"]
     box-sizing: border-box;
 }
 
-.center
+/* Prostřední část obrazovky */
+#center
 {
     flex: 3;
 }
 
+/* Levá část obrazovky - žebříček uživatelů */
 #sidebar-left
 {
     align-items: flex-start;
 }
 
+/* Pravá část obrazovky - statistiky */
 #sidebar-right
 {
     align-items: flex-end;
 }
 
+/* Div obsahující tlačítko pro správnou a špatnou odpověď */
+#button-container
+{
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding-top: 40px;
+}
+
+/* Tlačítko pro označení správného úryvku kódu */
+#button-correct
+{
+    background: rgb(43, 153, 43);
+}
+
+/* Tlačítko pro označení chybného úryvku kódu */
+#button-incorrect
+{
+    background: rgb(172, 38, 38);
+}
+
+/* Dialog po vybrání správné odpovědi */
 #dialog-correct
 {
     background: rgb(43, 153, 43);
 }
 
+/* Dialog po vybrání špatné odpovědi */
 #dialog-incorrect
 {
     background: rgb(172, 38, 38);
 }
 
+/* Dialog po splnění denního kvízu */
 #daily-quiz-dialog
 {
     transform: translate(-50%, 40%);
@@ -179,6 +196,7 @@ input[type="submit"]
     height: 25%;
 }
 
+/* Úryvek kódu */
 #code-text-field
 {
     height: 140px;
@@ -187,11 +205,13 @@ input[type="submit"]
     justify-self: center;
 }
 
+/* Žebříček uživatelů */
 #leaderboard
 {
     white-space: pre;
 }
 
+/* Div obsahující čísla otázek denního kvízu */
 #daily-quiz-question-container
 {
     display: flex;
