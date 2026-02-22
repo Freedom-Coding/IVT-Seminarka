@@ -307,6 +307,7 @@ async function SubmitScore()
                 body: JSON.stringify({ name, score, time: timer.currentTime })
             });
 
+        //Načtení žebříčku s přidaným uživatelem
         LoadLeaderboard();
     }
     catch (err)
@@ -317,6 +318,7 @@ async function SubmitScore()
     timer.reset();
 }
 
+//Inicializace
 InitializeStatistics();
 LoadQuestions();
 LoadLeaderboard();
