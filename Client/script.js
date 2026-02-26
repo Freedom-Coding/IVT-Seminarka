@@ -28,8 +28,10 @@ const timeCounter = document.getElementById("time-counter");
 const dialogIncorrect = document.getElementById("dialog-incorrect");
 const dialogCorrect = document.getElementById("dialog-correct");
 const leaderboard = document.getElementById("leaderboard");
+const statisticsAnsweredQuestions = document.getElementById("answered-questions");
 const statisticsTime = document.getElementById("statistics-time");
 const statisticsSuccessRate = document.getElementById("statistics-success-rate");
+const loadingScreen = document.getElementById("loading-screen");
 
 //Nastavení funkcí, které se spustí po stisku tlačítek
 function AddButtonListeners()
@@ -77,8 +79,9 @@ function UpdateStatistics()
     localStorage.setItem(ANSWER_TIME, answerTime);
 
     //Zobrazení nových hodnot statistik
+    statisticsAnsweredQuestions.textContent = `Answered questions: ${answeredQuestions}`;
     statisticsSuccessRate.textContent = `Success rate: ${(correctAnswers / answeredQuestions * 100).toFixed(1)}%`;
-    statisticsTime.innerHTML = Utils.formatDuration(Math.floor(answerTime / answeredQuestions));
+    statisticsTime.innerHTML = `Answer time: ${Utils.formatDuration(Math.floor(answerTime / answeredQuestions))}`;
 }
 
 //Inicializace otázek
@@ -173,10 +176,6 @@ function ShowQuestionDialog(dialogElement)
 //Zobrazení další otázky
 function ShowNextQuestion(correctAnswer) 
 {
-    answeredQuestions++;
-    if (correctAnswer) correctAnswers++;
-    UpdateStatistics();
-
     if (doingDailyQuiz)
     {
         const lastQuestion = dailyQuizQuestionContainer.children[currentDailyQuestionIndex];
@@ -196,9 +195,12 @@ function ShowNextQuestion(correctAnswer)
         currentDailyQuestionIndex += 1;
         if (currentDailyQuestionIndex >= dailyQuizQuestions.length)
         {
-            //Zastavení časovače
+            //Aktualizace statistik
             answerTime += timer.getTime();
             timer.stop();
+            answeredQuestions += 5;
+            correctAnswers += dailyQuizCorrectAnswers;
+            UpdateStatistics();
             //Zobrazení dialogu po dokončení denního kvízu
             dailyQuizDialog.style.display = "block";
             dailyQuizDialogScore.textContent = `Score: ${dailyQuizCorrectAnswers / 5 * 100}`;
@@ -215,6 +217,11 @@ function ShowNextQuestion(correctAnswer)
     {
         //Zobrazení náhodné otázky v případě, že uživatel nedělá denní kvíz
         ShowRandomQuestion();
+
+        //Aktualizace statistik
+        answeredQuestions++;
+        if (correctAnswer) correctAnswers++;
+        UpdateStatistics();
     }
 }
 
@@ -235,12 +242,7 @@ async function DailyQuizButton()
         question.style.background = "#192029";
     }
 
-    //Zobrazení vizuálu otázek
-    dailyQuizQuestionContainer.style.display = "flex";
-    //Zobrazení aktuální otázky
-    dailyQuizQuestionContainer.children[0].style.border = "2px solid gray";
-    //Zobrazení časovače
-    timeCounter.style.display = "block";
+    loadingScreen.style.display = "block";
 
     //Načtení otázek denního kvízu ze serveru
     const response = await fetch("https://ivt-seminarka.uc.r.appspot.com/dailyQuiz");
@@ -253,6 +255,15 @@ async function DailyQuizButton()
             timeCounter.innerHTML = timer.getTimeString();
         }
     }
+
+    loadingScreen.style.display = "none";
+    //Zobrazení vizuálu otázek
+    dailyQuizQuestionContainer.style.display = "flex";
+    //Zobrazení aktuální otázky
+    dailyQuizQuestionContainer.children[0].style.border = "2px solid gray";
+    //Zobrazení časovače
+    timeCounter.style.display = "block";
+
     timer.start();
 
     //Zobrazení první otázky

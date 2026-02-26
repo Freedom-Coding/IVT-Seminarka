@@ -218,3 +218,12 @@ input[type="submit"]
     justify-content: center;
     gap: 10px;
 }
+
+/* Načítací obrazovka */
+#loading-screen
+{
+    display: none;
+    transform: translate(-50%, -30%);
+    width: 30%;
+    height: 50%;
+}
